@@ -6,7 +6,7 @@ from .models import Questions
 from django.shortcuts import get_object_or_404, render
 
 # Create your views here.
-
+# /polls/
 def index(request):
     latest_question_list = Questions.objects.order_by("-pub_date")[:5]
     # template = loader.get_template("polls/index.html")
@@ -14,13 +14,16 @@ def index(request):
     # return HttpResponse(template.render(context,request))
     return render(request,"polls/index.html",context)
 
+# /polls/5
 def details(request,question_id):
     question = get_object_or_404(Questions,pk=question_id)
     return render(request,"polls/detail.html",{"question":question})
 
+# /polls/5/results/
 def result(request,question_id):
     response = "you are looking at the result of the question %s."
     return HttpResponse(response % question_id)
 
+# /polls/5/vote/
 def vote(request,question_id):
     return HttpResponse(f"You are voting on the question {question_id}")
