@@ -22,8 +22,8 @@ def details(request,question_id):
 
 # /polls/5/results/
 def result(request,question_id):
-    response = "you are looking at the result of the question %s."
-    return HttpResponse(response % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, "polls/results.html", {"question": question})
 
 # /polls/5/vote/
 def vote(request,question_id):
@@ -39,7 +39,7 @@ def vote(request,question_id):
                 "error_message":"you didn't select a choice.",
             },    
         )
-    except:
-        selected_choice.votes = F("votes") + 1
+    else:
+        selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
